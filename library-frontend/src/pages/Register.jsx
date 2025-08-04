@@ -14,7 +14,8 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/register', form);
+      // await axios.post('http://localhost:5000/api/users/register', form);
+      await axios.post('https://library-management-system-pi4l.onrender.com/api/users/register', form);
       toast.success('Registration successful!');
       navigate('/login'); 
     } catch (err) {

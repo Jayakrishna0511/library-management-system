@@ -16,7 +16,8 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users', {
+      // const res = await axios.get('http://localhost:5000/api/users', {
+      const res = await axios.get('https://library-management-system-pi4l.onrender.com/api/users', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -36,7 +37,8 @@ const ManageUsers = () => {
   const handleDelete = async (userId) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+      // await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+      await axios.delete(`https://library-management-system-pi4l.onrender.com/api/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +56,8 @@ const ManageUsers = () => {
     try {
       const updatedStatus = currentStatus === 'active' ? 'inactive' : 'active';
       await axios.put(
-        `http://localhost:5000/api/users/${userId}/status`,
+        // `http://localhost:5000/api/users/${userId}/status`,
+        `https://library-management-system-pi4l.onrender.com/api/users/${userId}/status`,
         { status: updatedStatus },
         {
           headers: {
