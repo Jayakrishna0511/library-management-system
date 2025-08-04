@@ -89,28 +89,48 @@ exports.getAllUsers = async (req, res) => {
 
 // ✅ Update User Status
 exports.updateUserStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID format' });
+  }
+
+  if (!status) {
+    return res.status(400).json({ message: 'Status is required' });
+  }
+
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.status = req.body.status; // e.g., "active" or "inactive"
+    user.status = status;
     await user.save();
 
     res.json({ message: 'User status updated successfully', user });
   } catch (err) {
+    console.error('Status update error:', err);
     res.status(500).json({ message: 'Error updating user status' });
   }
 };
 
 // ✅ Delete User
 exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID format' });
+  }
+
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    await user.remove();
+    await User.deleteOne({ _id: id }); 
+
     res.json({ message: 'User deleted successfully' });
   } catch (err) {
+    console.error('Delete user error:', err);
     res.status(500).json({ message: 'Error deleting user' });
   }
 };
