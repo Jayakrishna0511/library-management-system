@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name, // changed from username
+        name: user.name,
         role: user.role,
       },
     });
@@ -63,8 +63,7 @@ exports.login = async (req, res) => {
   }
 };
 
-
-
+// Get Profile
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -75,5 +74,43 @@ exports.getProfile = async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// ✅ Get All Users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, '-password');
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+};
+
+// ✅ Update User Status
+exports.updateUserStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.status = req.body.status; // e.g., "active" or "inactive"
+    await user.save();
+
+    res.json({ message: 'User status updated successfully', user });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating user status' });
+  }
+};
+
+// ✅ Delete User
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    await user.remove();
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting user' });
   }
 };
