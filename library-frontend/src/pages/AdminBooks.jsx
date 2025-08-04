@@ -20,16 +20,16 @@ const AdminBooks = () => {
     }
   }, [navigate, token, user]);
 
-  const fetchBooks = async () => {
-    try {
-      const res = await api.get("/books", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBooks(res.data.books || []);
-    } catch (err) {
-      toast.error("Failed to fetch books.");
-    }
-  };
+    const fetchBooks = async () => {
+      try {
+        const res = await api.get("/books", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBooks(res.data.books || []);
+      } catch (err) {
+        toast.error("Failed to fetch books.");
+      }
+    };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
