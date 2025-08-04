@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose'); 
 const User = require('../models/User');
 
 // Generate JWT token
@@ -126,7 +127,7 @@ exports.deleteUser = async (req, res) => {
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    await User.deleteOne({ _id: id }); 
+    await User.deleteOne({ _id: id });
 
     res.json({ message: 'User deleted successfully' });
   } catch (err) {
