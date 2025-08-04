@@ -13,22 +13,45 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // const res = await axios.post('http://localhost:5000/api/users/login', form);
-      const res = await axios.post('https://library-management-system-pi4l.onrender.com/api/users/login', form);
+    handleLogin(form.email, form.password);
+  };
 
+  const handleLogin = async (email, password) => {
+    try {
+      const res = await axios.post(
+        'https://library-management-system-pi4l.onrender.com/api/users/login',
+        { email, password }
+      );
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
-
       toast.success('Login successful!');
-      navigate('/dashboard');
+      if (res.data.user.role === 'admin') {
+        navigate('/dashboard');
+      } else {
+        navigate('/books');
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     }
   };
 
+  const guestButtons = [
+    {
+      label: 'Admin Guest Login',
+      email: 'jay@example.com',
+      password: '123456',
+      bg: '#800020',
+    },
+    {
+      label: 'User Guest Login',
+      email: 'rajesh@gmail.com',
+      password: '123456',
+      bg: '#4f46e5',
+    },
+  ];
+
   return (
-    <div style={{ 
+    <div style={{
       minHeight: "100vh",
       display: "flex",
       alignItems: "center",
@@ -37,7 +60,6 @@ function Login() {
       background: "linear-gradient(135deg, #F5E5DC 0%, #800020 100%)",
       position: "relative"
     }}>
-      
       {/* Decorative shapes */}
       <div style={{
         position: "absolute",
@@ -60,12 +82,11 @@ function Login() {
         opacity: "0.15"
       }}></div>
 
-      <div style={{ 
-        width: "100%", 
+      <div style={{
+        width: "100%",
         maxWidth: "400px",
         textAlign: "center"
       }}>
-        
         {/* Header */}
         <div style={{ marginBottom: "32px" }}>
           <div style={{
@@ -80,13 +101,13 @@ function Login() {
           }}>
             📚
           </div>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: "32px",
             fontWeight: "bold",
             margin: "0 0 8px 0",
             color: "#800020"
           }}>Welcome Back</h2>
-          <p style={{ 
+          <p style={{
             color: "#666",
             margin: "0"
           }}>Sign in to your library account</p>
@@ -101,15 +122,14 @@ function Login() {
           border: "1px solid rgba(255, 255, 255, 0.2)",
           backdropFilter: "blur(10px)"
         }}>
-          
+
           <form onSubmit={handleSubmit}>
-            
             <div style={{ marginBottom: "20px" }}>
-              <input 
-                name="email" 
-                onChange={handleChange} 
-                placeholder="Email Address" 
-                required 
+              <input
+                name="email"
+                onChange={handleChange}
+                placeholder="Email Address"
+                required
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -127,12 +147,12 @@ function Login() {
             </div>
 
             <div style={{ marginBottom: "24px" }}>
-              <input 
-                name="password" 
-                type="password" 
-                onChange={handleChange} 
-                placeholder="Password" 
-                required 
+              <input
+                name="password"
+                type="password"
+                onChange={handleChange}
+                placeholder="Password"
+                required
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -149,7 +169,7 @@ function Login() {
               />
             </div>
 
-            <button 
+            <button
               type="submit"
               style={{
                 width: "100%",
@@ -177,15 +197,37 @@ function Login() {
             </button>
           </form>
 
-          <p style={{ 
+          {/* Guest Login Buttons */}
+          <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            {guestButtons.map(btn => (
+              <button
+                key={btn.label}
+                onClick={() => handleLogin(btn.email, btn.password)}
+                style={{
+                  padding: "10px 16px",
+                  backgroundColor: btn.bg,
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  fontSize: "15px"
+                }}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+
+          <p style={{
             marginTop: "24px",
             color: "#666",
             fontSize: "14px"
           }}>
             Don't have an account?{' '}
-            <Link 
-              to="/register" 
-              style={{ 
+            <Link
+              to="/register"
+              style={{
                 color: "#800020",
                 textDecoration: "none",
                 fontWeight: "600"
@@ -199,11 +241,11 @@ function Login() {
         </div>
 
         {/* Footer */}
-        <div style={{ 
+        <div style={{
           textAlign: "center",
           marginTop: "32px"
         }}>
-          <p style={{ 
+          <p style={{
             fontSize: "12px",
             color: "rgba(255, 255, 255, 0.8)",
             margin: "0"
