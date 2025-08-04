@@ -17,8 +17,8 @@ router.post('/login', login);
 // Protected routes
 router.get('/profile', authMiddleware, getProfile);
 router.get('/', authMiddleware, getAllUsers);
-router.put('/:id/status', authMiddleware, updateUserStatus); // ✅ NEW
-router.delete('/:id', authMiddleware, deleteUser);           // ✅ NEW
+router.put('/:id/status', authMiddleware, updateUserStatus); 
+router.delete('/:id', authMiddleware, deleteUser);           
 
 module.exports = router;
 
